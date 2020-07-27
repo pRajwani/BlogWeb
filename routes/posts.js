@@ -292,33 +292,33 @@ router.route('/:postId/like')
             post.likes.push(req.user._id);
             post.save()
             .then((post)=> {
-                res.statusCode = 200;
-                res.setHeader('Content-Type','application/json');
-                res.json(post.likes.length);
+                Posts.findById(req.params.postId)
+                .populate('likes')
+                .then((post)=>{
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type','application/json');
+                    res.json(post.likes);
+                },(err)=>next(err))
+                .catch((err)=>next(err));
             },(err)=> next(err))
             .catch((err)=> next(err));
         }
-        else res.end('You\'ve already liked the post');
-    },(err)=> next(err))
-    .catch((err)=> next(err));
-})
-//To Delete like on a specific post
-.delete(cors.corsOption,authenticate.verifyUser,(req,res,next)=> {
-    Posts.findById(req.params.postId)
-    .populate('likes.likeAuthor')
-    .then((post)=> {
-            if(post.likes.indexOf(req.user._id)>-1) {
+        else  {
                 var i = post.likes.indexOf(req.user._id);
                 post.likes.splice(i,1);
                 post.save()
                 .then((post)=> {
-                    res.statusCode = 200;
-                    res.setHeader('Content-Type','application/json');
-                    res.json(post.likes.length);
+                    Posts.findById(req.params.postId)
+                    .populate('likes')
+                    .then((post)=>{
+                        res.statusCode = 200;
+                        res.setHeader('Content-Type','application/json');
+                        res.json(post.likes);
+                    },(err)=>next(err))
+                    .catch((err)=>next(err));
                 },(err)=> next(err))
                 .catch((err)=> next(err));
             }
-            else res.end('You have not liked the post');
     },(err)=> next(err))
     .catch((err)=> next(err));
 })

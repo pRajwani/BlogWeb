@@ -24,6 +24,7 @@ router.get('/', function(req, res, next) {
 
 //routes for /users/register
 router.route('/register')
+.options(cors.corsOption)
 .get((req,res)=>{
   res.render('register')
 })

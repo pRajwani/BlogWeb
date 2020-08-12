@@ -11,7 +11,7 @@ var postsRouter = require('./routes/posts');
 var imageUpload = require('./routes/upload');
 
 var app = express();
-
+var PORT = process.env.PORT || 8080;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -32,7 +32,7 @@ app.use(passport.initialize());
 app.get('*',(req,res)=>{
   res.sendFile(path.join(__dirname,'public'));
 })
-app.use('/', indexRouter);
+
 app.use('/users', usersRouter);
 app.use('/post', postsRouter);
 app.use('/upload',imageUpload);
@@ -54,7 +54,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(3000, 'localhost', ()=> {
+app.listen(PORT, 'localhost', ()=> {
   console.log("Connected to Server")
 })
 

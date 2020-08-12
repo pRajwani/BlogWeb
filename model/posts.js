@@ -43,6 +43,10 @@ var postSchema = new schema({
     View: {
         type: Number,
         default: 0
+    },
+    featured:{
+        type: Boolean,
+        default: false
     }
 
 },

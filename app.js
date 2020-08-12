@@ -29,7 +29,9 @@ app.use(passport.initialize());
   res.setHeader("Access-Control-Allow-Methods","POST,GET,DELETE,PUT,OPTIONS,PATCH");
   next();
 })*/
-
+app.get('*',(req,res)=>{
+  res.sendFile(path.join(__dirname,'public'));
+})
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/post', postsRouter);

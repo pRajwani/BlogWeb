@@ -1,4 +1,4 @@
-//node Modules
+ //node Modules
 var cors = require('./cors')
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -19,6 +19,7 @@ router.route('/')
 })
 .get(cors.cors,(req,res,next)=> {
     Posts.find({})
+    .populate('postAuthor')
     .then((posts)=>{
         res.statusCode = 200;
         res.setHeader('content-type','application/json');
@@ -63,6 +64,7 @@ router.route('/:postId')
     Posts.findById(req.params.postId)
     .populate('Comments.commentAuthor')
     .populate('postAuthor')
+    .populate('likes')
     .then((posts)=>{
         posts.View += 1;
         posts.save()
@@ -106,9 +108,8 @@ router.route('/:postId')
 .delete(cors.corsOption,authenticate.verifyUser,(req,res,next)=> {
     Posts.findById(req.params.postId)
     .then((posts)=>{
-        if(posts.Author == req.user.id) {
-            post.findByIdAndDelete(req.params.postId)
-            .populate('comment.Author')
+        if(posts.postAuthor == req.user.id) {
+            Posts.findByIdAndDelete(req.params.postId)
             .then((post)=>{
                 res.statusCode = 200;
                 res.setHeader('content-type','application/json');
@@ -297,7 +298,7 @@ router.route('/:postId/like')
                 .then((post)=>{
                     res.statusCode = 200;
                     res.setHeader('Content-Type','application/json');
-                    res.json(post.likes);
+                    res.json(post);
                 },(err)=>next(err))
                 .catch((err)=>next(err));
             },(err)=> next(err))
@@ -313,7 +314,7 @@ router.route('/:postId/like')
                     .then((post)=>{
                         res.statusCode = 200;
                         res.setHeader('Content-Type','application/json');
-                        res.json(post.likes);
+                        res.json(post);
                     },(err)=>next(err))
                     .catch((err)=>next(err));
                 },(err)=> next(err))

@@ -67,14 +67,14 @@ router.post('/login', cors.corsOption, (req,res,next)=> {
     if(err)
       return next(err);
     if(!user) {
-      res.statusCode=401;
+      res.statusCode=200;
       res.setHeader('Content-Type','application/json');
       res.json({success:false, status:'Login Unsuccessfull', err: info});
       return;
     }
     req.logIn(user, (err)=> {
       if(err) {
-        res.statusCode=401;
+        res.statusCode=200;
         res.setHeader('Content-Type','application/json');
         res.json({success:false, status:'Login Unsuccessful!-1', err: info });
         return;
@@ -85,7 +85,7 @@ router.post('/login', cors.corsOption, (req,res,next)=> {
       res.json({success:true, status:"Logged in", token:token});
       console.log(token);
     });
-  }) (req,res,next);
+  }) (req,res,next); 
 });
 
 module.exports = router;

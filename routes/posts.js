@@ -23,7 +23,7 @@ router.route('/')
     .then((posts)=>{
         res.statusCode = 200;
         res.setHeader('content-type','application/json');
-        res.json(posts);
+        res.json(posts.sort((a,b)=>{return b.View-a.View}));
     },(err)=>next(err))
     .catch((err)=>next(err));
 })

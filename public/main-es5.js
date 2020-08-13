@@ -4645,36 +4645,42 @@
           value: function postComment() {
             var _this22 = this;
 
-            this.commentService.postComment(this.route.snapshot.paramMap.get('postId'), {
-              Comment: this.comment
-            }).subscribe(function (Comment) {
-              _this22.Comments = Comment;
-            });
+            if (this.username) {
+              this.commentService.postComment(this.route.snapshot.paramMap.get('postId'), {
+                Comment: this.comment
+              }).subscribe(function (Comment) {
+                _this22.Comments = Comment;
+              });
+            } else alert('Please Login to Comment');
           }
         }, {
           key: "like",
           value: function like() {
             var _this23 = this;
 
-            this.likeService.postlike(this.route.snapshot.paramMap.get('postId')).subscribe(function (post) {
-              if (post.likes.length == 0) _this23.likesLocal = _this23.emptyLikesLocal;else _this23.likesLocal = post.likes;
-              if (_this23.likesLocal[0].username == '') _this23.likeCount = 0;else _this23.likeCount = _this23.likesLocal.length;
+            if (this.username) {
+              this.likeService.postlike(this.route.snapshot.paramMap.get('postId')).subscribe(function (post) {
+                if (post.likes.length == 0) _this23.likesLocal = _this23.emptyLikesLocal;else _this23.likesLocal = post.likes;
+                if (_this23.likesLocal[0].username == '') _this23.likeCount = 0;else _this23.likeCount = _this23.likesLocal.length;
 
-              for (var like = 0; like < _this23.likesLocal.length; like++) {
-                if (_this23.likesLocal[like].username == _this23.username) {
-                  _this23.liked = true;
-                  _this23.flag = true;
-                  return;
-                } else if (_this23.likesLocal[like].username != _this23.username) {
-                  _this23.flag = false;
-                  continue;
+                for (var like = 0; like < _this23.likesLocal.length; like++) {
+                  if (_this23.likesLocal[like].username == _this23.username) {
+                    _this23.liked = true;
+                    _this23.flag = true;
+                    return;
+                  } else if (_this23.likesLocal[like].username != _this23.username) {
+                    _this23.flag = false;
+                    continue;
+                  }
                 }
-              }
 
-              if (_this23.flag == false) {
-                _this23.liked = false;
-              }
-            });
+                if (_this23.flag == false) {
+                  _this23.liked = false;
+                }
+              });
+            } else {
+              alert('Login First to Like');
+            }
           }
         }, {
           key: "isEditable",

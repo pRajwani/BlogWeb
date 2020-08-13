@@ -904,7 +904,7 @@ class IndexComponent {
             this.name = JSON.parse(localStorage.getItem('JWT')).username;
         }
         this.postService.getPosts().subscribe((posts) => {
-            this.posts = posts;
+            this.posts = posts.sort((a, b) => { return a.Views - b.View; });
             this.featuredPosts = posts.filter((o) => { return o.featured == true; });
         });
     }
@@ -2316,7 +2316,7 @@ class SinglePostComponent {
         });
     }
     postComment() {
-        if (this.username) {
+        if (localStorage.getItem('JWT')) {
             this.commentService.postComment(this.route.snapshot.paramMap.get('postId'), { Comment: this.comment })
                 .subscribe((Comment) => {
                 this.Comments = Comment;
@@ -2326,7 +2326,7 @@ class SinglePostComponent {
             alert('Please Login to Comment');
     }
     like() {
-        if (this.username) {
+        if (localStorage.getItem('JWT')) {
             this.likeService.postlike(this.route.snapshot.paramMap.get('postId'))
                 .subscribe((post) => {
                 if (post.likes.length == 0)

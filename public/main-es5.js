@@ -1772,7 +1772,9 @@
             }
 
             this.postService.getPosts().subscribe(function (posts) {
-              _this5.posts = posts;
+              _this5.posts = posts.sort(function (a, b) {
+                return a.Views - b.View;
+              });
               _this5.featuredPosts = posts.filter(function (o) {
                 return o.featured == true;
               });
@@ -4645,7 +4647,7 @@
           value: function postComment() {
             var _this22 = this;
 
-            if (this.username) {
+            if (localStorage.getItem('JWT')) {
               this.commentService.postComment(this.route.snapshot.paramMap.get('postId'), {
                 Comment: this.comment
               }).subscribe(function (Comment) {
@@ -4658,7 +4660,7 @@
           value: function like() {
             var _this23 = this;
 
-            if (this.username) {
+            if (localStorage.getItem('JWT')) {
               this.likeService.postlike(this.route.snapshot.paramMap.get('postId')).subscribe(function (post) {
                 if (post.likes.length == 0) _this23.likesLocal = _this23.emptyLikesLocal;else _this23.likesLocal = post.likes;
                 if (_this23.likesLocal[0].username == '') _this23.likeCount = 0;else _this23.likeCount = _this23.likesLocal.length;
